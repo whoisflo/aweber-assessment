@@ -2,6 +2,7 @@ interface Props {
     label: string;
     name: string;
     type?: string;
+    forwardedRef: React.RefObject<HTMLInputElement>;
 }
 
 const InputItem: React.FC<Props> = ({ ...props }) => {
@@ -14,6 +15,7 @@ const InputItem: React.FC<Props> = ({ ...props }) => {
                 type={props.type}
                 name={props.name}
                 id={props.name}
+                ref={props.forwardedRef}
                 className="mt-1 block w-full rounded-lg border border-gray-600 bg-gray-700 p-2.5"
             />
         </>
