@@ -1,1 +1,6 @@
-export type PassCheck = { text: string; check: string; isValid: boolean };
+export type PassCheck = {
+    text: string;
+    isValid: boolean;
+    regex: string;
+    status: string;
+};

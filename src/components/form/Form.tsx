@@ -4,11 +4,11 @@ import Button from "../ui/Buttons";
 import Status from "../ui/Status";
 import InputItem from "./InputItem";
 
+import { passChecksData } from "../../data/passChecks";
+
 const Form = () => {
-    const [passStatus, setPassStatus] = useState({
-        isValid: true,
-        status: "",
-    });
+    const [passChecks, setPassChecks] = useState(passChecksData);
+    const [passMatch, setPassMatch] = useState(true);
 
     const passInputRef = useRef<HTMLInputElement>(null);
     const passConfirmInputRef = useRef<HTMLInputElement>(null);
@@ -22,11 +22,26 @@ const Form = () => {
     };
 
     const checkIsPassValid = (pass: string, passConfirm: string) => {
-        console.log("submit", pass, passConfirm);
-
         if (pass !== passConfirm) {
-            setPassStatus({ isValid: false, status: "no_match" });
+            setPassMatch(false);
             return;
+        } else setPassMatch(true);
+
+        const updatedPassChecks = [...passChecks];
+        updatedPassChecks.forEach((item) => {
+            if (!new RegExp(item.regex).test(pass)) item.isValid = false;
+            else item.isValid = true;
+        });
+
+        const isValidationLeft = updatedPassChecks.filter(
+            (item) => !item.isValid
+        );
+
+        if (isValidationLeft.length > 0) {
+            setPassChecks(updatedPassChecks);
+        } else {
+            setPassChecks(updatedPassChecks);
+            alert("success!");
         }
     };
 
@@ -35,7 +50,7 @@ const Form = () => {
             <fieldset>
                 <InputItem
                     label="Password"
-                    name="password"
+                    name="pass"
                     type="password"
                     forwardedRef={passInputRef}
                 />
@@ -43,14 +58,12 @@ const Form = () => {
             <fieldset className="mt-4">
                 <InputItem
                     label="Confirm password"
-                    name="password"
+                    name="passConfirm"
                     type="password"
                     forwardedRef={passConfirmInputRef}
                 />
             </fieldset>
-
-            {!passStatus.isValid && <Status message={passStatus.message} />}
-
+            <Status passMatch={passMatch} passChecks={passChecks} />
             <Button type="submit" text="Check password" />
         </form>
     );

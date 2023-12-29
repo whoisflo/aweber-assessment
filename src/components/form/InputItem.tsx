@@ -1,8 +1,8 @@
 interface Props {
     label: string;
     name: string;
-    type?: string;
     forwardedRef: React.RefObject<HTMLInputElement>;
+    type: string;
 }
 
 const InputItem: React.FC<Props> = ({ ...props }) => {
